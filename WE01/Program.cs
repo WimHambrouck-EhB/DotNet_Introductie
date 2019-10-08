@@ -8,7 +8,7 @@ namespace WE01
     {
         static void Main(string[] args)
         {
-            Oef2();
+            Oef3();
         }
 
         private static void Oef1()
@@ -46,6 +46,15 @@ namespace WE01
             }
 
             Console.WriteLine(builder.ToString());
+        }
+
+
+        private static void Oef3()
+        {
+            Maand currentMonth = new Maand();
+            currentMonth.MaandNr = 11;
+            currentMonth.Jaar = 2002;
+            Console.WriteLine(currentMonth);
         }
     }
 }
