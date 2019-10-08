@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WE01Lib\WE01Lib.csproj" />
+  </ItemGroup>
+
 </Project>
