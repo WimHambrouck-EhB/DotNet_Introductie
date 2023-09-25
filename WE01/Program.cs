@@ -8,51 +8,43 @@ namespace WE01
     {
         static void Main(string[] args)
         {
-            Oef3();
-        }
+            Console.WriteLine("===== Oef 1: Wissel =====");
 
-        private static void Oef1()
-        {
             int a = 17; // the least random number
             int b = 47; // the quintessential random number
-
-            Console.WriteLine($"Voor wissel: a = {a}, b = {b}");            
+            Console.WriteLine("Waarden voor wissel:");
+            Console.WriteLine($"a = {a}");
+            Console.WriteLine($"b = {b}");
 
             Helper.Wissel(ref a, ref b);
 
-            Console.WriteLine($"Na wissel: a = {a}, b = {b}");
-        }
+            Console.WriteLine("Na wissel:");
+            Console.WriteLine($"a = {a}");
+            Console.WriteLine($"b = {b}");
+            Console.WriteLine();
 
-        private static void Oef2()
-        {
-            Console.Write("Zin: ");
-            string invoer = Console.ReadLine();
+            Console.WriteLine("===== Oef 2: camelCase =====");
+            Console.Write("Voer een zin in: ");
+            string? invoer = Console.ReadLine();
 
+            // blijven invoer vragen indien invoer leeg was
             while (string.IsNullOrWhiteSpace(invoer))
             {
-                Console.WriteLine("Ongeldige invoer! Probeer opnieuw...");
-                Console.Write("Zin: ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ongeldige invoer!");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine();
+                Console.Write("Voer een zin in: ");
                 invoer = Console.ReadLine();
             }
 
-            string[] woorden = invoer.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            Console.WriteLine(Helper.ZinNaarCamelCase(invoer));
+            Console.WriteLine();
 
-            StringBuilder builder = new StringBuilder();
-            builder.Append(woorden[0].ToLower());
+            Console.WriteLine("===== Oef 3: Kalender =====");
 
-            for (int i = 1; i < woorden.Length; i++)
-            {
-                builder.AppendFormat("{0}{1}", woorden[i].Substring(0, 1).ToUpper(), woorden[i].Substring(1).ToLower());
-            }
-
-            Console.WriteLine(builder.ToString());
-        }
-
-
-        private static void Oef3()
-        {
-            Maand currentMonth = new Maand();
-            currentMonth.MaandNr = 11;
+            Maand currentMonth = new();
+            currentMonth.Maandnr = 11;
             currentMonth.Jaar = 2002;
             Console.WriteLine(currentMonth);
         }
