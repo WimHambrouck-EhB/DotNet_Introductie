@@ -27,14 +27,14 @@ namespace WE01Lib
             /* invoer opkuisen en opdelen. In volgorde gebeurt hier:
              *   1 - Spaties voor en achteraan de zin worden weggehaalt met Trim()
              *   2 - Zin wordt omgezet naar kleine letters
-             *   3 - Zin wordt opgesplits in array van strings (op basis van de spaties in de zin)
+             *   3 - Zin wordt opgesplitst in array van strings (op basis van de spaties in de zin)
              *   
              *   Opmerking: elke van deze methoden maakt een kopie van de string.
              *   In volgende werkcolleges gaan we LINQ zien, dan kan je dit efficiënter oplossen met een query.
              */
             string[] woorden = invoer.Trim().ToLowerInvariant().Split(' ');
 
-            // gebruik van stringbuilder voor optimalisatie tijdens for-lus
+            // gebruik van StringBuilder voor optimalisatie tijdens for-lus
             StringBuilder uitvoer = new();
             // eerste woord is sowieso lowercase, dus toevoegen aan uitvoer
             uitvoer.Append(woorden[0]);

@@ -27,7 +27,7 @@ namespace WE01
             Console.Write("Voer een zin in: ");
             string? invoer = Console.ReadLine();
 
-            // blijven invoer vragen indien invoer leeg was
+            // blijven invoer vragen als invoer leeg was
             while (string.IsNullOrWhiteSpace(invoer))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
