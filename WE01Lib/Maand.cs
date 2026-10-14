@@ -45,9 +45,8 @@ namespace WE01Lib
             int aantalDagen = DateTime.DaysInMonth(Jaar, Maandnr);
 
             // Op welke dag startte deze maand
-
             // in Amerika begint de week op zondag (= 0),
-            // daarom kleine omzetting: zondag wordt 6 en alle andere dagen worden -1 gedaan
+            // daarom kleine omzetting: zondag wordt 6 en alle andere dagen worden opgeschoven
             // waardoor maandag = 0 (i.p.v. 1), dinsdag = 1 (i.p.v. 2), ..., zondag = 6                    
             int startDag = ((int)datum.DayOfWeek + 6) % 7; // enums hebben achterliggen een int-waarde, dus je kan zonder problemen casten
 
