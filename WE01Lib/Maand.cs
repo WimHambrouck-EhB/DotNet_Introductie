@@ -1,114 +1,92 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 
 namespace WE01Lib
 {
     public class Maand
     {
-        private int maandnr;
+        private static readonly string[] DagNamen = ["ma", "di", "wo", "do", "vr", "za", "zo"];
 
         public int Maandnr
         {
-            get { return maandnr; }
+            get;
             set
             {
                 if (value >= 1 && value <= 12)
                 {
-                    maandnr = value;
+                    field = value;
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException(nameof(maandnr), "Maandnr moet een nummer zijn tussen 1 en 12 inclusief.");
+                    throw new ArgumentOutOfRangeException(nameof(Maandnr), "Maandnr moet een nummer zijn tussen 1 en 12 inclusief.");
                 }
             }
-        }
-
-        private int jaar;
+        } = DateTime.Today.Month;
 
         public int Jaar
         {
-            get { return jaar; }
+            get;
             set
             {
                 if (value >= DateTime.MinValue.Year && value <= DateTime.MaxValue.Year)
                 {
-                    jaar = value;
+                    field = value;
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException(nameof(jaar), $"Jaar moet een nummer zijn tussen {DateTime.MinValue.Year} en {DateTime.MaxValue.Year} inclusief."); ;
+                    throw new ArgumentOutOfRangeException(nameof(Jaar), $"Jaar moet een nummer zijn tussen {DateTime.MinValue.Year} en {DateTime.MaxValue.Year} inclusief."); ;
                 }
             }
-        }
-
-
-        private readonly Dictionary<int, List<string>> data;
-
-        public Maand()
-        {
-            // voor elke dag in de week een lijn in de dictionary klaarzetten met een lege lijst van strings
-            data = new Dictionary<int, List<string>>();
-
-            foreach (DayOfWeek dag in Enum.GetValues(typeof(DayOfWeek)))
-            {
-                // in Amerika begint de week op zondag (= 0),
-                // daarom kleine omzetting: zondag wordt 6 en alle andere dagen worden -1 gedaan
-                // waardoor maandag = 0 (i.p.v. 1), dinsdag = 1 (i.p.v. 2), ...
-                if (dag == DayOfWeek.Sunday)
-                {
-                    data.Add(6, new List<string>());
-                }
-                else
-                {
-                    // enums hebben achterliggen een int-waarde, dus je kan zonder problemen casten
-                    data.Add((int)dag - 1, new List<string>());
-                }
-            }
-        }
+        } = DateTime.Today.Year;
 
         public override string ToString()
         {
             DateTime datum = new(Jaar, Maandnr, 1);
-            StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine(datum.ToString("Y"));
-            stringBuilder.AppendLine();
+            int aantalDagen = DateTime.DaysInMonth(Jaar, Maandnr);
 
-            // omzetten weekdag (uitleg zie ctor)
-            int weekdag = (datum.DayOfWeek == DayOfWeek.Sunday) ? 6 : (int)datum.DayOfWeek - 1;
+            // Op welke dag startte deze maand
 
-            for (int i = 0; i < weekdag; i++)
+            // in Amerika begint de week op zondag (= 0),
+            // daarom kleine omzetting: zondag wordt 6 en alle andere dagen worden -1 gedaan
+            // waardoor maandag = 0 (i.p.v. 1), dinsdag = 1 (i.p.v. 2), ..., zondag = 6                    
+            int startDag = ((int)datum.DayOfWeek + 6) % 7; // enums hebben achterliggen een int-waarde, dus je kan zonder problemen casten
+
+            // aantal weken in die maand, afgerond naar boven
+            int aantalWeken = (int)Math.Ceiling((startDag + aantalDagen) / 7m);
+
+            // 2-dim array: een rij voor elke weekdag en een kolom voor elke week
+            string[,] kalender = new string[7, aantalWeken];
+
+            // array opvullen (for vanaf 1, want er is geen dag 0 in de maand)
+            for (int dagnr = 1; dagnr <= aantalDagen; dagnr++)
             {
-                // maand begint niet op maandag, dus lege plaatsen invoegen op dagen vóór de begindag van de maand
-                if (data.TryGetValue(i, out List<string>? dd))
-                {
-                    dd.Add(string.Empty);
-                }
+                int index = startDag + dagnr - 1;
+                int rij = index % 7;
+                int kol = index / 7;
+
+                kalender[rij, kol] = dagnr.ToString("00");
             }
 
-            // elke dag in deze maand aflopen            
-            while (datum.Month == Maandnr)
+            // StringBuilder om uitvoer op te bouwen
+            StringBuilder sb = new();
+            sb.AppendLine(datum.ToString("Y", CultureInfo.CurrentCulture));
+            sb.AppendLine();
+
+            // per rij naam van de dag toevoegen gevolgd door de kolommen, gescheiden door een tab
+            for (int rij = 0; rij < 7; rij++)
             {
-                weekdag = (datum.DayOfWeek == DayOfWeek.Sunday) ? 6 : (int)datum.DayOfWeek - 1;
-                // alle dagen voor deze weekdag opvragen & huidige dag toevoegen
-                if (data.TryGetValue(weekdag, out List<string>? dd))
+                sb.Append(DagNamen[rij]);
+
+                for (int col = 0; col < aantalWeken; col++)
                 {
-                    dd.Add(datum.ToString("dd"));
+                    sb.Append('\t');
+                    sb.Append(kalender[rij, col]);
                 }
-                datum = datum.AddDays(1);
+
+                sb.AppendLine();
             }
 
-            // "kalender" opbouwen met stringbuilder
-            stringBuilder.AppendLine("ma\t" + string.Join("\t", data[0]));
-            stringBuilder.AppendLine("di\t" + string.Join("\t", data[1]));
-            stringBuilder.AppendLine("wo\t" + string.Join("\t", data[2]));
-            stringBuilder.AppendLine("do\t" + string.Join("\t", data[3]));
-            stringBuilder.AppendLine("vr\t" + string.Join("\t", data[4]));
-            stringBuilder.AppendLine("za\t" + string.Join("\t", data[5]));
-            stringBuilder.AppendLine("zo\t" + string.Join("\t", data[6]));
-
-            return stringBuilder.ToString();
+            return sb.ToString();
         }
     }
 }

@@ -18,9 +18,9 @@ namespace WE01Lib
         }
 
         /// <summary>
-        /// Zet een in om naar een camelCase woord.
+        /// Zet een zin om naar een camelCase woord.
         /// </summary>
-        /// <param name="invoer">Om te zetten zin. Methode gaat er van uit dat deze niet leeg is en niet enkel spaties bevat.</param>
+        /// <param name="invoer">Om te zetten zin.</param>
         /// <returns>Invoer omgezet naar camelCase woord.</returns>
         public static string ZinNaarCamelCase(string invoer)
         {
@@ -36,19 +36,26 @@ namespace WE01Lib
 
             // gebruik van StringBuilder voor optimalisatie tijdens for-lus
             StringBuilder uitvoer = new();
-            // eerste woord is sowieso lowercase, dus toevoegen aan uitvoer
+            // eerste woord is sowieso lowercase, toevoegen aan uitvoer
             uitvoer.Append(woorden[0]);
 
-            // alle volgende woorden aflopen
+            // alle volgende woorden in de array overlopen
             for (int i = 1; i < woorden.Length; i++)
             {
                 // huidige woord in de zin ophalen
-                var woord = woorden[i];
+                string woord = woorden[i];
                 if (!string.IsNullOrWhiteSpace(woord))
                 {
                     // eerste letter hoofdletter maken en toevoegen aan uitvoer
-                    // woord[1..] is een range operator, meer info: https://learn.microsoft.com/en-us/dotnet/csharp/tutorials/ranges-indexes
+                    // rest van de string toevoegen met range operator. Meer info: https://learn.microsoft.com/en-us/dotnet/csharp/tutorials/ranges-indexes
                     uitvoer.Append(char.ToUpperInvariant(woord[0]) + woord[1..]);
+
+                    /**** Alternatieve oplossing (zonder range operator) ****/
+                    //uitvoer.Append(woord[0].ToString().ToUpperInvariant());
+                    //for (int j = 1; j < woord.Length; j++)
+                    //{
+                    //    uitvoer.Append(woord[j]);
+                    //}
                 }
             }
 

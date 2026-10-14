@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using WE01Lib;
+﻿using WE01Lib;
 
 namespace WE01
 {
@@ -43,9 +41,11 @@ namespace WE01
 
             Console.WriteLine("===== Oef 3: Kalender =====");
 
-            Maand currentMonth = new();
-            currentMonth.Maandnr = 11;
-            currentMonth.Jaar = 2002;
+            Maand currentMonth = new()
+            {
+                Maandnr = 11,
+                Jaar = 2002
+            };
             Console.WriteLine(currentMonth);
         }
     }
